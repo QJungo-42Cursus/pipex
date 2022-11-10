@@ -1,36 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prt.h                                              :+:      :+:    :+:   */
+/*   long_atoi.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qjungo <qjungo@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/01 14:39:08 by qjungo            #+#    #+#             */
-/*   Updated: 2022/11/08 11:12:44 by qjungo           ###   ########.fr       */
+/*   Created: 2022/11/08 10:57:21 by qjungo            #+#    #+#             */
+/*   Updated: 2022/11/08 10:58:23 by qjungo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PRT_H
-# define PRT_H
+#include "../libft.h"
 
-typedef enum e_color {
-	BLUE,
-	RED,
-	YELLOW,
-	PURPLE,
-	GREEN,
-	CYAN,
-	WHITE,
-	RESET,
-	BOLD,
-	STD,
-}	t_color;
+long	long_atoi(const char *string)
+{
+	long		result;
+	int			i;
+	int			minus;
 
-int		ft_printf(const char *string, ...);
-void	ft_putchar_fd(char c, int fd);
-void	ft_putendl_fd(char *s, int fd);
-void	ft_putstr_fd(char *s, int fd);
-void	ft_putnbr_fd(int n, int fd);
-void	ft_color(t_color color, int font);
-
-#endif /* PRT_H */
+	result = 0;
+	i = 0;
+	minus = 1;
+	while (is_in_charset(string[i], " \t\n\r\v\f"))
+		i++;
+	if (string[i] == '-')
+	{
+		minus = -minus;
+		i++;
+	}
+	else if (string[i] == '+')
+		i++;
+	while (is_in_charset(string[i], "0123456789"))
+	{
+		result = result * 10 + string[i] - 48;
+		i++;
+	}
+	return (result * minus);
+}

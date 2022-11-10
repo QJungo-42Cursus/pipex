@@ -6,7 +6,7 @@
 /*   By: qjungo <qjungo@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/26 11:35:26 by qjungo            #+#    #+#             */
-/*   Updated: 2022/11/02 10:03:15 by qjungo           ###   ########.fr       */
+/*   Updated: 2022/11/09 10:56:14 by qjungo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,30 @@ typedef struct s_img_data {
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-	int		x_size;
-	int		y_size;
+	t_vec2	size;
 }	t_img_data;
 
+typedef struct s_color_gradient {
+	int		n;
+	int		start;
+	int		end;
+}	t_color_gradient;
+
 typedef struct s_line {
-	t_vec2	a;
-	t_vec2	b;
-	int		color;
-	int		thickness;
+	t_vec2				a;
+	t_vec2				b;
+	t_color_gradient	color;
+	int					thickness;
 }	t_line;
 
 /// PROTOTYPES
 
 void	draw_line(t_img_data *img, t_line line);
 void	pixel_to_image(t_img_data *img, t_vec2 point, int color);
-t_line	new_line(t_vec2 a, t_vec2 b, int color, int thickness);
+t_line	new_line(t_vec2 a, t_vec2 b, t_color_gradient color, int thickness);
+//
+void	offset(t_vec2 img_size, t_vec2 *point, t_droite droite);
+int		check_max(float x, float y, t_img_data img);
 
 /// EVENT HANDLING
 

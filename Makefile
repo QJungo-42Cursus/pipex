@@ -19,6 +19,6 @@ fclean: clean
 re: fclean all
 
 test: all
-	./pipex
+	./pipex -l -a
 
 .PHONY: all clean fclean re test

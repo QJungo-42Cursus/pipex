@@ -25,6 +25,7 @@ SRCS_STR =		ft_strmapi.c \
 
 SRCS_NB = 		ft_itoa.c \
 				ft_atoi.c \
+				long_atoi.c \
 				itoa_base.c \
 				utoa.c
 
@@ -78,11 +79,13 @@ SRCS_MATH = 	geometrie/line.c \
 				vec/copy.c \
 				vec/conversions.c \
 				vec/assert.c \
+				abs.c \
 				new_.c
 
 SRCS_MLX = 		line.c \
 				line.c \
 				draw_line.c \
+				draw_line_utils.c \
 				pixel_to_image.c
 
 SRCS = 			$(addprefix char/,	$(SRCS_CHAR)) \
