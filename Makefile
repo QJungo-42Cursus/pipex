@@ -1,14 +1,18 @@
 NAME =     		pipex
 CC =			gcc
 CFLAGS =		-Wall -Wextra -Werror
+LIBFT =			-L./libft -lft
 RM =			rm -f
-SRCS = 			main.c
+SRCS = 			main.c \
+				read_all_file.c
 OBJS =			$(SRCS:.c=.o)
 
 $(NAME): $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	@make -C libft
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
 
 all: $(NAME)
+
 
 clean:
 	@$(RM) $(OBJS)
@@ -18,7 +22,12 @@ fclean: clean
 
 re: fclean all
 
-test: all
-	./pipex -l -a
+t: all
+	./pipex /bin/ls -l -a
+
+db:
+	@make -C libft
+	@$(CC) $(CFLAGS) $(SRCS) -g $(LIBFT) -o $(NAME)
+	lldb ./pipex ls -l -a
 
 .PHONY: all clean fclean re test
