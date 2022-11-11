@@ -33,30 +33,64 @@ typedef struct s_command {
 ///		Le PID (process ID) reste le meme lors d'un appel de execve
 
 
-int	main(int argc, char **argv)
+int	main(int argc, char **argv, char **envp)
 {
-	char	*infile;
+	char		*infile;
+	char		*outfile;
+	t_bool		here_doc;
+	t_command	*cmds;
 
-	infile = read_all_file("infile");
-	if (infile == NULL)
+	int j = 0;
+	while (envp[j])
 	{
-		// TODO
-		return (1);
+		if (!ft_strncmp(envp[j], "PATH", 4))
+			ft_printf("%d - %s\n", j, envp[j]);
+		// TODO get tout les paths
+		// et test avec la fonction "access F_OK" si le file existe en essayand tout les paths..
+
+
+		j++;
 	}
-	//ft_printf("file :\n%s", infile);
 	argc--;
 	argv++;
-
-	//char	*envp[] = {"TEST=\"test\"", "PATH=/bin:/home/qjungo/.cargo/bin:/home/qjungo/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl", NULL};
-	execve(argv[0], argv, NULL);
-
-	perror("Voila ");
-	return (0);
-
-	(void)argv;
 	if (argc < 4)
 	{
 		ft_printf("Pas assez d'arguments\n\"infile\" \"cmd1\" \"cmd2\" \"outfile\"");
 		return (0);
 	}
+	// TODO
+	// if argv[0] == here_doc -> bonus
+	// here_doc_mode(int argc, char **argv);
+	(void)here_doc;
+	infile = read_all_file(argv[0]);
+	if (infile == NULL)
+	{
+		// TODO
+		perror("");
+		return (1);
+	}
+	outfile = read_all_file(argv[argc - 1]); 
+	if (outfile == NULL)
+	{
+		// TODO
+		perror("");
+		return (1);
+	}
+	cmds = malloc(sizeof(t_command) * (argc - 2));
+	int		i;
+	i = 0;
+	argv++;
+	while (i < argc - 2)
+	{
+		cmds[i].argv = ft_split(argv[i], ' ');
+		//ft_printf("%s\n", argv[i]);
+		i++;
+	}
+	
+
+	execve(argv[0], argv, NULL);
+
+	perror("Voila ");
+	return (0);
+
 }

@@ -15,15 +15,17 @@ all: $(NAME)
 
 
 clean:
+	@make clean -C libft
 	@$(RM) $(OBJS)
 
 fclean: clean
+	@make fclean -C libft
 	@$(RM) $(NAME)
 
 re: fclean all
 
 t: all
-	./pipex /bin/ls -l -a
+	./pipex ./infile "/bin/ls -l -a" "wc -l" ./outfile
 
 db:
 	@make -C libft
