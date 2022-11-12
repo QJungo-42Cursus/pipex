@@ -57,6 +57,7 @@ SRCS_PRT = 		ft_putchar_fd.c \
 				ft_printf/conversions/hexa.c \
 				ft_printf/conversions/pointer.c \
 				ft_printf/writer/writer.c \
+				ft_printf/writer/swriter.c \
 				ft_printf/utils/free_join.c \
 				ft_printf/utils/index_words.c
 
@@ -88,6 +89,7 @@ SRCS_MLX = 		line.c \
 				draw_line_utils.c \
 				pixel_to_image.c
 
+
 SRCS = 			$(addprefix char/,	$(SRCS_CHAR)) \
 				$(addprefix str/,	$(SRCS_STR)) \
 				$(addprefix lst/,	$(SRCS_LST)) \
@@ -98,7 +100,14 @@ SRCS = 			$(addprefix char/,	$(SRCS_CHAR)) \
 				$(addprefix mlx/,	$(SRCS_MLX)) \
 				get_next_line.c
 
+SRCS_T =		test_printf.c \
+				test_sprintf.c \
+				main.c
+
+SRCS_TEST =		$(addprefix tests/,	$(SRCS_T))
+
 OBJS =			$(SRCS:.c=.o)
+OBJS_T =		$(SRCS_TEST:.c=.o)
 
 $(NAME): $(OBJS)
 	@ar -rcs $(NAME) $(OBJS)
@@ -106,11 +115,23 @@ $(NAME): $(OBJS)
 all: $(NAME)
 
 clean:
-	@$(RM) $(OBJS) $(OBJS_BONUS)
-
+	@$(RM) $(OBJS) $(OBJS_T)
 fclean: clean
-	@$(RM) $(NAME)
+	@$(RM) $(NAME) tester
 
 re: fclean all
+
+SAN =	-fsanitize=address -fsanitize=undefined -fno-sanitize-recover=all \
+		-fsanitize=float-divide-by-zero -fsanitize=float-cast-overflow \
+		-fno-sanitize=null -fno-sanitize=alignment
+
+# TODO : garder ca tout le temps ?? (pour le san)
+#%.o: %.c
+#		@$(CC) -I. -o $@ -c $? $(SAN) $(CFLAGS)
+
+test: $(OBJS) $(OBJS_T)
+	ar -rcs $(NAME) $(OBJS)
+	$(CC) $(CFLAGS) $(SAN) $(OBJS_T) -L. -lft -o tester
+	./tester
 
 .PHONY: all clean fclean re

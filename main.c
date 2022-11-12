@@ -2,17 +2,10 @@
 #include <errno.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <stdlib.h>
+#include <sys/wait.h>
 #include "libft/libft.h"
 #include "pipex.h"
-
-typedef struct s_command {
-	char	**argv;
-	char	**envp;
-
-	// autre ??
-	int		pid;
-	int		parent_pid;
-}	t_command;
 
 ///		< in_file cmd1 | cmd2 > out_file
 ///		1. check if the file exists
@@ -32,25 +25,27 @@ typedef struct s_command {
 ///
 ///		Le PID (process ID) reste le meme lors d'un appel de execve
 
+t_bool	is_here_doc(char *first_arg)
+{
+	if (ft_strncmp(first_arg, "here_doc", 8) == 0)
+		return (TRUE);
+	return (FALSE);
+}
+
+void	here_doc_mode(int argc, char **argv, char **envp)
+{
+	(void)argc;
+	(void)argv;
+	(void)envp;
+	// TODO
+}
 
 int	main(int argc, char **argv, char **envp)
 {
 	char		*infile;
 	char		*outfile;
-	t_bool		here_doc;
 	t_command	*cmds;
 
-	int j = 0;
-	while (envp[j])
-	{
-		if (!ft_strncmp(envp[j], "PATH", 4))
-			ft_printf("%d - %s\n", j, envp[j]);
-		// TODO get tout les paths
-		// et test avec la fonction "access F_OK" si le file existe en essayand tout les paths..
-
-
-		j++;
-	}
 	argc--;
 	argv++;
 	if (argc < 4)
@@ -58,10 +53,12 @@ int	main(int argc, char **argv, char **envp)
 		ft_printf("Pas assez d'arguments\n\"infile\" \"cmd1\" \"cmd2\" \"outfile\"");
 		return (0);
 	}
-	// TODO
-	// if argv[0] == here_doc -> bonus
-	// here_doc_mode(int argc, char **argv);
-	(void)here_doc;
+	if (is_here_doc(argv[0]))
+	{
+		// TODO
+		here_doc_mode(argc, argv, envp);
+		return (0); // Inutile ??
+	}
 	infile = read_all_file(argv[0]);
 	if (infile == NULL)
 	{
@@ -80,17 +77,37 @@ int	main(int argc, char **argv, char **envp)
 	int		i;
 	i = 0;
 	argv++;
-	while (i < argc - 2)
+	argc--;
+
+	char **env_paths = get_env_path(envp);
+	while (i < argc - 1)
 	{
 		cmds[i].argv = ft_split(argv[i], ' ');
-		//ft_printf("%s\n", argv[i]);
+		cmds[i].path = get_cmd_path(cmds[i].argv[0], env_paths);
 		i++;
 	}
-	
-
-	execve(argv[0], argv, NULL);
-
-	perror("Voila ");
+	int pid = fork();
+	int *val = malloc(sizeof(int));
+	*val = 0;
+	if (pid == 0)
+	{
+		// TODO
+		// child
+		// execve(cmds[0].path, cmds[0].argv, envp);
+		*val = 2;
+		printf("child val : %i\n", *val);
+	}
+	else
+	{
+		// TODO
+		// parent
+		// wait(NULL);
+		//*val = 0;
+		waitpid(pid, NULL, 0);
+		printf("parent val %i\n", *val);
+	}
+	printf("fini");
+	//perror("Voila ");
 	return (0);
 
 }

@@ -6,7 +6,7 @@
 /*   By: qjungo <qjungo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 11:10:51 by qjungo            #+#    #+#             */
-/*   Updated: 2022/11/10 16:31:41 by qjungo           ###   ########.fr       */
+/*   Updated: 2022/11/01 13:41:56 by qjungo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,6 @@ void	ft_lstadd_back(t_list **lst, t_list *n)
 {
 	t_list	*ptr;
 
-	if (lst == NULL)
-	{
-		*lst = n;
-		return ;
-	}
 	ptr = ft_lstlast(*lst);
 	if (ptr == NULL)
 	{

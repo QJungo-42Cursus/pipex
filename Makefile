@@ -4,7 +4,10 @@ CFLAGS =		-Wall -Wextra -Werror
 LIBFT =			-L./libft -lft
 RM =			rm -f
 SRCS = 			main.c \
+				get/env_path.c \
+				get/cmd_path.c \
 				read_all_file.c
+
 OBJS =			$(SRCS:.c=.o)
 
 $(NAME): $(OBJS)
@@ -25,7 +28,7 @@ fclean: clean
 re: fclean all
 
 t: all
-	./pipex ./infile "/bin/ls -l -a" "wc -l" ./outfile
+	./pipex "./infile" "ls -l -a" "wc -l" "./outfile"
 
 db:
 	@make -C libft

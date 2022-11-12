@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   writer.c                                           :+:      :+:    :+:   */
+/*   swriter.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qjungo <qjungo@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 08:40:45 by qjungo            #+#    #+#             */
-/*   Updated: 2022/11/11 09:30:28 by qjungo           ###   ########.fr       */
+/*   Updated: 2022/11/11 10:19:47 by qjungo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "../../../libft.h"
 #include "../utils/utils.h"
 
+/*
 static int	putstr_res(const char *string)
 {
 	int	len;
@@ -37,68 +38,50 @@ static int	putstr_until(const char *string, int len)
 	}
 	return (0);
 }
+*/
 
-static int	word(t_word word, int *i_char, const char *string)
+static void	flag(t_word *word, int *i_char, va_list args)
 {
-	int		res;
-
-	res = putstr_until(&(string[word.start]), word.len);
-	if (res == -1)
-		return (-1);
-	(*i_char) += word.len;
-	return (0);
-}
-
-static int	flag(t_word word, int *i_char, va_list args)
-{
-	char	*to_print;
-	int		res;
-
-	if (word.flag[0] == '%')
+	if (word->flag[0] == '%')
 	{
-		res = putstr_res("%");
+		word->string = ft_strdup("%");
 		(*i_char)++;
-		return (res);
+		return ;
 	}
-	to_print = conversions(word.flag, args);
-	if (to_print == NULL)
-		return (-1);
-	if (word.flag[0] == 'c' && ft_strlen(to_print) == 0)
+	word->string = conversions(word->flag, args);
+	if (word->string == NULL)
+		return ;
+	// TODO if (word->flag[0] == 'c' && ft_strlen(word->flag) == 0)
+	if (word->flag[0] == 'c' && ft_strlen(word->string) == 0)
 	{
 		(*i_char)++;
-		free(to_print);
-		return (putstr_until("", 1));
+		return ;
 	}
-	res = putstr_res(to_print);
-	(*i_char) += ft_strlen(to_print);
-	free(to_print);
-	return (res);
+	(*i_char) += ft_strlen(word->string);
 }
 
-int	writer(const t_list *words, va_list args, const char *string)
+int	swriter(
+		const t_list *words,
+		va_list args,
+		const char *string)
 {
-	int		to_print;
-	int		i_word;
 	int		i_char;
+	t_word	*word;
 
-	i_word = 0;
 	i_char = 0;
 	while (words != NULL)
 	{
+		word = (t_word *)words->content;
 		if (((t_word *)words->content)->type == WORD)
 		{
-			to_print = word(*(t_word *)words->content, &i_char, string);
-			if (to_print == -1)
-				return (-1);
+			word->string = ft_substr(string, word->start, word->len);
+			i_char += word->len;
 		}
 		else if (((t_word *)words->content)->type == FLAG)
-		{
-			to_print = flag(*(t_word *)words->content, &i_char, args);
-			if (to_print == -1)
-				return (-1);
-		}
+			flag((t_word *)words->content, &i_char, args);
+		if (word->string == NULL)
+			return (-1);
 		words = words->next;
-		i_word++;
 	}
 	return (i_char);
 }
