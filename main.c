@@ -123,22 +123,20 @@ int	main(int argc, char **argv, char **envp)
 	else if (pid1 == 0)
 	{
 		dup2(pipers[1], STDOUT_FILENO); // remplace le standard output par le fd to write
+		close(pipers[0]);
+		close(pipers[1]);
 		execve(cmds[0].path, cmds[0].argv, envp);
 		exit(EXIT_SUCCESS);
 	}
-	else
-	{
-		// Juste ca continue normal (vu que le execve fait en sorte de sarreter la...)
-	}
+	else {} // Juste ca continue normal (vu que le execve fait en sorte de sarreter la...)
 	waitpid(pid1, NULL, 0);
 
-
-
-
+	/*
 	close(pipers[1]); // close le write (unused)
-	char *res = read_all_file(pipers[0]);
+	char *res1 = read_all_file(pipers[0]);
 	close(pipers[0]); // close le read
-	printf("child val : '%s',\n", res);
+	printf("child val : '%s',\n", res1);
+	*/
 
 
 
@@ -149,8 +147,10 @@ int	main(int argc, char **argv, char **envp)
 	}
 	else if (pid2 == 0)
 	{
-		//dup2(pipers[1], STDOUT_FILENO); // remplace le standard output par le fd to write
-		//execve(cmds[0].path, cmds[0].argv, envp);
+		dup2(pipers[0], STDIN_FILENO); // remplace le standard input, par ce qu'on veut lui faire lire
+		close(pipers[0]);
+		close(pipers[1]);
+		execve(cmds[1].path, cmds[1].argv, envp);
 		exit(EXIT_SUCCESS);
 	}
 	else
