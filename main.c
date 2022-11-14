@@ -59,14 +59,27 @@ int	main(int argc, char **argv, char **envp)
 		here_doc_mode(argc, argv, envp);
 		return (0); // Inutile ??
 	}
-	infile = read_all_file(argv[0]);
+
+	int infile_fd = open(argv[0], O_RDONLY);
+	if (infile_fd == -1)
+	{
+		// TODO
+		return (2);
+	}
+	infile = read_all_file(infile_fd);
 	if (infile == NULL)
 	{
 		// TODO
 		perror("");
 		return (1);
 	}
-	outfile = read_all_file(argv[argc - 1]); 
+	int outfile_fd = open(argv[0], O_RDONLY);
+	if (outfile_fd == -1)
+	{
+		// TODO
+		return (2);
+	}
+	outfile = read_all_file(outfile_fd); 
 	if (outfile == NULL)
 	{
 		// TODO
@@ -79,6 +92,8 @@ int	main(int argc, char **argv, char **envp)
 	argv++;
 	argc--;
 
+
+
 	char **env_paths = get_env_path(envp);
 	while (i < argc - 1)
 	{
@@ -86,28 +101,63 @@ int	main(int argc, char **argv, char **envp)
 		cmds[i].path = get_cmd_path(cmds[i].argv[0], env_paths);
 		i++;
 	}
-	int pid = fork();
-	int *val = malloc(sizeof(int));
-	*val = 0;
-	if (pid == 0)
+
+	// Pipe
+	int	pipers[2];
+	// pipe[0] -> read
+	// pipe[1] -> write
+	int status = pipe(pipers);
+	if (status == -1)
+	{
+		ft_printf("ah ba merde... (pipe pas marche)\n");
+		perror(": ");
+		// free
+		return 0;
+	}
+
+	int pid1 = fork();
+	if (pid1 == -1)
 	{
 		// TODO
-		// child
-		// execve(cmds[0].path, cmds[0].argv, envp);
-		*val = 2;
-		printf("child val : %i\n", *val);
+	}
+	else if (pid1 == 0)
+	{
+		dup2(pipers[1], STDOUT_FILENO); // remplace le standard output par le fd to write
+		execve(cmds[0].path, cmds[0].argv, envp);
+		exit(EXIT_SUCCESS);
 	}
 	else
 	{
-		// TODO
-		// parent
-		// wait(NULL);
-		//*val = 0;
-		waitpid(pid, NULL, 0);
-		printf("parent val %i\n", *val);
+		// Juste ca continue normal (vu que le execve fait en sorte de sarreter la...)
 	}
-	printf("fini");
-	//perror("Voila ");
-	return (0);
+	waitpid(pid1, NULL, 0);
+
+
+
+
+	close(pipers[1]); // close le write (unused)
+	char *res = read_all_file(pipers[0]);
+	close(pipers[0]); // close le read
+	printf("child val : '%s',\n", res);
+
+
+
+	int pid2 = fork();
+	if (pid2 == -1)
+	{
+		// TODO
+	}
+	else if (pid2 == 0)
+	{
+		//dup2(pipers[1], STDOUT_FILENO); // remplace le standard output par le fd to write
+		//execve(cmds[0].path, cmds[0].argv, envp);
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		// Juste ca continue normal (vu que le execve fait en sorte de sarreter la...)
+	}
+
+
 
 }

@@ -12,7 +12,7 @@ typedef struct s_command {
 	int		parent_pid;
 }	t_command;
 
-char	*read_all_file(const char *path);
+char	*read_all_file(const int fd);
 
 //		/get
 char	**get_env_path(char **envp);

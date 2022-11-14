@@ -44,19 +44,12 @@ static char	*all_in_string(int final_len, t_list *list)
 	return (res);
 }
 
-char	*read_all_file(const char *path)
+char	*read_all_file(const int fd)
 {
 	int		final_len;
-	int		fd;
 	t_list	*list;
 	char	*res;
 
-	fd = open(path, O_RDONLY);
-	// TODO perror
-	if (fd == -1)
-	{
-		return (NULL);
-	}
 	list = NULL;
 	all_in_list(fd, &final_len, &list);
 	res = all_in_string(final_len, list);
