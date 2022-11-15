@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   ft_split_pad.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qjungo <qjungo@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 20:52:33 by qjungo            #+#    #+#             */
-/*   Updated: 2022/11/14 20:26:27 by qjungo           ###   ########.fr       */
+/*   Updated: 2022/11/14 20:26:20 by qjungo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	index_words(char const *s, char c, t_word *words)
 	return (i_word);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split_pad(char const *s, char c, int padding)
 {
 	t_word	words[2048];
 	int		n_word;
@@ -62,7 +62,7 @@ char	**ft_split(char const *s, char c)
 	char	**res;
 
 	n_word = index_words(s, c, words);
-	res = malloc((n_word + 1) * sizeof(char *));
+	res = malloc((n_word + 1 + padding) * sizeof(char *));
 	if (res == NULL)
 		return (NULL);
 	i_word = 0;

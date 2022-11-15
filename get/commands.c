@@ -1,0 +1,78 @@
+#include "../libft/libft.h"
+#include "../pipex.h"
+
+/*
+ * libft ??
+static void	add_end(char **list, char *string)
+{
+	int	word_c;
+
+	word_c = 0;
+	while (list[word_c] != NULL)
+		word_c++;
+	list[word_c] = string;
+	list[word_c + 1] = NULL;
+}
+*/
+
+
+void		pre_free(t_command **cmds)
+{
+	int		i;
+
+	i = 0;
+	while ((*cmds)[i - 1].position != END)
+	{
+		if ((*cmds)[i].argv != NULL)
+			split_free((*cmds)[i].argv);
+		if ((*cmds)[i].path!= NULL)
+			free((*cmds)[i].path);
+		i++;	
+	}
+	free(*cmds);
+	terminate("Proble lors d'allocation de memoire");
+}
+
+#include <stdio.h>
+static void	all_cmds(t_command **cmds, char ***env_paths, char **envp, int argc)
+{
+	*cmds = malloc(sizeof(t_command) * (argc - 1));
+	if (*cmds == NULL)
+		terminate("Probleme lors d'allocation de memoires pour les commandes");
+	*env_paths = get_env_path(envp);
+	if (*env_paths == NULL)
+	{
+		free(*cmds);
+		terminate("Probleme lors de la recuperation du PATH");
+	}
+}
+
+t_command	*get_cmds(int argc, char **argv, char **envp)
+{
+	t_command	*cmds;
+	char		**env_paths;
+	int			i;
+
+	all_cmds(&cmds, &env_paths, envp, argc);
+	i = 0;
+	while (i < argc - 1)
+	{
+		cmds[i].position = END;
+		if (i == 1)
+			cmds[i - 1].position = START;
+		if (i > 1)
+			cmds[i - 1].position = MIDDLE;
+		cmds[i].path = NULL;
+		cmds[i].argv = NULL;
+		//cmds[i].argv = ft_split(argv[i], ' ');						// MALLOC
+		cmds[i].argv = get_argv(argv[i]);						// MALLOC
+		if (cmds[i].argv == NULL)
+			pre_free(&cmds);
+		cmds[i].path = get_cmd_path(cmds[i].argv[0], env_paths);	// MALLOC
+		if (cmds[i].path == NULL)
+			pre_free(&cmds);
+		cmds[i].envp = envp;
+		i++;
+	}
+	return (cmds);
+}

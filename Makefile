@@ -3,19 +3,31 @@ CC =			gcc
 CFLAGS =		-Wall -Wextra -Werror
 LIBFT =			-L./libft -lft
 RM =			rm -f
-SRCS = 			main.c \
+
+# shared
+S_SRCS =		utils.c \
+				read_all_file.c \
 				get/env_path.c \
 				get/cmd_path.c \
-				read_all_file.c
+				get/argv.c \
+				get/commands.c
 
-OBJS =			$(SRCS:.c=.o)
+M_SRC =			main.c
+M_SRCS =		$(addprefix mandatory/, $(M_SRC))
 
-$(NAME): $(OBJS)
+S_OBJS =		$(S_SRCS:.c=.o)
+M_OBJS =		$(M_SRCS:.c=.o)
+#B_OBJS =		$(SRCS:.c=.o)
+
+$(NAME): $(M_OBJS) $(S_OBJS)
 	@make -C libft
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(S_OBJS) $(M_OBJS) $(LIBFT) -o $(NAME)
+
+#bonus: $(B_OBJS) $(S_OBJS)
+#	@make -C libft
+#	@$(CC) $(CFLAGS) $(B_OBJS) $(S_OBJS) $(LIBFT) -o $(NAME)
 
 all: $(NAME)
-
 
 clean:
 	@make clean -C libft
@@ -28,7 +40,14 @@ fclean: clean
 re: fclean all
 
 t: all
-	./pipex "./infile" "ls -l -a" "wc -l" "./outfile"
+	$(RM) outfile
+	./pipex "infile" "cat" "wc -l" "outfile"
+
+tb: all
+	$(RM) outfile boutfile
+	./pipex "infile" "wc -l" "cat" "cat" "cat" "cat" "cat" "cat" "boutfile"
+#./pipex "infile" "cat" "cat" "cat" "boutfile"
+#./pipex "infile" "cat" "grep i" "cat" "wc" "cat" "outfile"
 
 db:
 	@make -C libft

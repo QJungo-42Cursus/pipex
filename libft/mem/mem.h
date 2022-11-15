@@ -6,7 +6,7 @@
 /*   By: qjungo <qjungo@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 14:44:19 by qjungo            #+#    #+#             */
-/*   Updated: 2022/11/01 14:44:26 by qjungo           ###   ########.fr       */
+/*   Updated: 2022/11/15 08:18:47 by qjungo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,6 @@ int		ft_memcmp(const void *str1, const void *str2, size_t n);
 void	*ft_memchr(const void *str, int c, size_t n);
 void	*ft_memmove(void *dest, const void *src, size_t n);
 void	*ft_memset(void *s, int c, size_t n);
+void	split_free(char **list);
 
 #endif /* MEM_H */
