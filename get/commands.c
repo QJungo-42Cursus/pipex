@@ -15,8 +15,7 @@ static void	add_end(char **list, char *string)
 }
 */
 
-
-void		pre_free(t_command **cmds)
+void	pre_free(t_command **cmds, char *msg)
 {
 	int		i;
 
@@ -25,15 +24,14 @@ void		pre_free(t_command **cmds)
 	{
 		if ((*cmds)[i].argv != NULL)
 			split_free((*cmds)[i].argv);
-		if ((*cmds)[i].path!= NULL)
+		if ((*cmds)[i].path != NULL)
 			free((*cmds)[i].path);
-		i++;	
+		i++;
 	}
 	free(*cmds);
-	terminate("Proble lors d'allocation de memoire");
+	terminate(msg);
 }
 
-#include <stdio.h>
 static void	all_cmds(t_command **cmds, char ***env_paths, char **envp, int argc)
 {
 	*cmds = malloc(sizeof(t_command) * (argc - 1));
@@ -64,15 +62,16 @@ t_command	*get_cmds(int argc, char **argv, char **envp)
 			cmds[i - 1].position = MIDDLE;
 		cmds[i].path = NULL;
 		cmds[i].argv = NULL;
-		//cmds[i].argv = ft_split(argv[i], ' ');						// MALLOC
-		cmds[i].argv = get_argv(argv[i]);						// MALLOC
+		cmds[i].argv = get_argv(argv[i]);
 		if (cmds[i].argv == NULL)
-			pre_free(&cmds);
-		cmds[i].path = get_cmd_path(cmds[i].argv[0], env_paths);	// MALLOC
-		if (cmds[i].path == NULL)
-			pre_free(&cmds);
+			pre_free(&cmds, "argv pas trouve...");
+		cmds[i].path = get_cmd_path(cmds[i].argv[0], env_paths);
 		cmds[i].envp = envp;
 		i++;
 	}
 	return (cmds);
 }
+	// TODO le program est sence continuer quand meme... -> check si le path 
+	// est null
+	//if (cmds[i].path == NULL)
+	//	pre_free(&cmds);

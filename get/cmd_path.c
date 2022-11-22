@@ -5,7 +5,7 @@ char	*get_cmd_path(char *name, char **env_paths)
 {
 	int		i;
 	char	*tmp_full_path;
-	
+
 	if (access(name, F_OK) == 0)
 		return (ft_strdup(name));
 	i = 0;
@@ -19,4 +19,3 @@ char	*get_cmd_path(char *name, char **env_paths)
 	}
 	return (NULL);
 }
-

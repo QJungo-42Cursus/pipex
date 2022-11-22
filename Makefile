@@ -19,8 +19,13 @@ S_OBJS =		$(S_SRCS:.c=.o)
 M_OBJS =		$(M_SRCS:.c=.o)
 #B_OBJS =		$(SRCS:.c=.o)
 
-$(NAME): $(M_OBJS) $(S_OBJS)
-	@make -C libft
+libft:
+	@make -C ../libft
+	cp ../libft/libft.a ./libft/
+	cp -r ../libft/*.h ./libft/
+
+$(NAME): $(M_OBJS) $(S_OBJS) libft
+	#@make -C libft
 	@$(CC) $(CFLAGS) $(S_OBJS) $(M_OBJS) $(LIBFT) -o $(NAME)
 
 #bonus: $(B_OBJS) $(S_OBJS)
@@ -30,11 +35,13 @@ $(NAME): $(M_OBJS) $(S_OBJS)
 all: $(NAME)
 
 clean:
-	@make clean -C libft
-	@$(RM) $(OBJS)
+	#@make clean -C libft
+	@$(RM) ./libft/libft.h
+	@$(RM) $(S_OBJS) $(M_OBJS)
 
 fclean: clean
-	@make fclean -C libft
+	@$(RM) ./libft/libft.a
+	#@make fclean -C libft
 	@$(RM) $(NAME)
 
 re: fclean all
@@ -42,6 +49,10 @@ re: fclean all
 t: all
 	$(RM) outfile
 	./pipex "infile" "cat" "wc -l" "outfile"
+
+hard: all
+	$(RM) outfile
+	./pipex "infile" "cat -e" "grep \\\\" "outfile"
 
 tb: all
 	$(RM) outfile boutfile
@@ -54,4 +65,4 @@ db:
 	@$(CC) $(CFLAGS) $(SRCS) -g $(LIBFT) -o $(NAME)
 	lldb ./pipex ls -l -a
 
-.PHONY: all clean fclean re test
+.PHONY: all clean fclean re test libft

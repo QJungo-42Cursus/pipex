@@ -13,7 +13,7 @@ char	**get_env_path(char **envp)
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 		{
 			path = ft_strdup(envp[i] + 5);
-			res = ft_split(path, ':'); // TODO free le res plus tard !!
+			res = ft_split(path, ':');
 			free(path);
 			return (res);
 		}
@@ -21,3 +21,4 @@ char	**get_env_path(char **envp)
 	}
 	return (NULL);
 }
+// TODO free le res plus tard !!
