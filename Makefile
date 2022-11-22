@@ -19,16 +19,13 @@ S_OBJS =		$(S_SRCS:.c=.o)
 M_OBJS =		$(M_SRCS:.c=.o)
 #B_OBJS =		$(SRCS:.c=.o)
 
-libft:
-	@make -C ../libft
-	mkdir -p libft
-	cp ../libft/libft.a libft
-	cp ../libft/libft.h libft
-	find ../libft -name '*.h' | cpio -pdm 'libft/'
+u_libft:
+	rm -rf libft
+	cp -r ../libft .
+	rm -rf libft/.git
 
 $(NAME): $(M_OBJS) $(S_OBJS)
-	make libft
-	#@make -C libft
+	@make -C libft
 	@$(CC) $(CFLAGS) $(S_OBJS) $(M_OBJS) $(LIBFT) -o $(NAME)
 
 #bonus: $(B_OBJS) $(S_OBJS)
@@ -38,17 +35,14 @@ $(NAME): $(M_OBJS) $(S_OBJS)
 all: $(NAME)
 
 clean:
-	#@make clean -C libft
-	@$(RM) -r libft
+	@make clean -C libft
 	@$(RM) $(S_OBJS) $(M_OBJS)
 
 fclean: clean
-	#@make fclean -C libft
+	@make fclean -C libft
 	@$(RM) $(NAME)
 
-re: fclean
-	make libft
-	make all
+re: u_libft fclean all
 
 t: all
 	$(RM) outfile

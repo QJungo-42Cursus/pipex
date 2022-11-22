@@ -31,7 +31,12 @@ int	piper(t_command cmd, int infile_fd, int outfile_fd, int pipers[2])
 		dup2(outfile_fd, STDOUT_FILENO); // remplace le standard out, par le fichier out
 	close(pipers[0]);
 	close(pipers[1]);
-	execve(cmd.path, cmd.argv, cmd.envp);
+	if (execve(cmd.path, cmd.argv, cmd.envp) == -1)
+	{
+		perror("execve");
+		//TODO test !!!
+		exit(1);
+	}
 	return (-1);
 }
 
@@ -40,6 +45,7 @@ void	pipex(t_command *cmds, int infile_fd, int outfile_fd /*, char **envp */)
 	int		i;
 	int		pipers[2]; // (read, write)
 
+	(void)i;
 	if (pipe(pipers) == -1)
 		full_free(&cmds, "Un probleme a eu lieu lors de l'ouverture du pipe");
 	i = 0;
