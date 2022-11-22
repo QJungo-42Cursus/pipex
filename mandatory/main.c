@@ -10,7 +10,7 @@
 
 #include <stdio.h>			// perror()
 
-//#include <sys/wait.h>		// waitpid ?
+#include <sys/wait.h>		// waitpid ?
 
 int	piper(t_command cmd, int infile_fd, int outfile_fd, int pipers[2])
 {
