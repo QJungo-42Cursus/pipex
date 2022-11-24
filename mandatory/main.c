@@ -84,6 +84,12 @@ int	main(int argc, char **argv, char **envp)
 	argv++;
 	if (argc < 4)
 		terminate("Pas assez d'arguments\n\"infile\" \"cmd1\" \"cmd2\" \"outfile\"");
+	/*
+	if (access(argv[0], R_OK) != 0)
+		terminate("On peut pas lire le infile");
+	if (access(argv[argc - 1], W_OK) != 0)
+		terminate("On peut pas ecrire dans le out file");
+	*/
 	infile_fd = open(argv[0], O_RDONLY);
 	/*
 	if (infile_fd == -1)

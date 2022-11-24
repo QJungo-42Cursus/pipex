@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "ECHOOOO (dans script.sh normal)"
+echo "ECHOOOO (dans script.sh normal) $PATH"

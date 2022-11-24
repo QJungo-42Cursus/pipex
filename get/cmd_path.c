@@ -19,7 +19,11 @@ char	*get_cmd_path(char *name, char **env_paths)
 		free(tmp_full_path);
 		i++;
 	}
-	if (access(name, F_OK) == 0)
+	ft_printf("name %s \n\n", name);
+	//if (access(name, F_OK) == 0 && ft_strchr(name, '/'))
+	/*
+	if (access(name, F_OK) == 0) 
 		return (ft_strdup(name));
+	*/
 	return (NULL);
 }
