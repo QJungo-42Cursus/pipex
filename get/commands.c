@@ -65,6 +65,7 @@ t_command	*get_cmds(int argc, char **argv, char **envp)
 		cmds[i].argv = get_argv(argv[i]);
 		if (cmds[i].argv == NULL)
 			pre_free(&cmds, "argv pas trouve...");
+		/*
 		if (cmds[i].argv[1] != NULL && ft_strchr(cmds[i].argv[1], '/'))
 		{
 			cmds[i].path = get_cmd_path(cmds[i].argv[1], env_paths);
@@ -72,9 +73,10 @@ t_command	*get_cmds(int argc, char **argv, char **envp)
 		}
 		else
 		{
+		*/
 			cmds[i].path = get_cmd_path(cmds[i].argv[0], env_paths);
 			ft_printf("nn: %s\n", cmds[i].argv[0]);
-		}
+		//}
 
 		cmds[i].is_script = FALSE;
 		cmds[i].envp = envp;

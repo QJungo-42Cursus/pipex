@@ -63,7 +63,7 @@ static void	to_next_quote(
 		(*i_char)++;
 	}
 	words[*i_word].len = *i_char - words[*i_word].pos;
-	(*i_word)++;
+	//(*i_word)++;
 	(*i_char)++;
 }
 
@@ -121,14 +121,10 @@ static int	index_words(char const *s, t_word *words)
 	while (s[i_char] != '\0')
 	{
 		if (s[i_char] == ' ')
-		{
-			//in_word = FALSE;
 			i_char++;
-		}
-		if (s[i_char] != ' ')
+		else if (s[i_char] != ' ')
 		{
 			i_nside = 0;
-			//in_word = TRUE;
 			words[i_word].pos = i_char;
 			words[i_word].len = 0;
 			while (s[i_char] != ' ' && s[i_char] != '\0')
@@ -166,7 +162,7 @@ char	**get_argv(char const *argv)
 	while (i_word < n_word)
 	{
 		res[i_word] = ft_substr(argv, words[i_word].pos, words[i_word].len);
-		ft_printf("%d| (%s)\n", i_word, res[i_word]); //
+		ft_printf("%d| pos:%d, len:%d, (%s)\n", i_word, words[i_word].pos, words[i_word].len, res[i_word]); //
 		if (res[i_word] == NULL)
 			return (free_all(&res));
 		i_word++;
