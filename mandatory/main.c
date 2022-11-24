@@ -23,8 +23,10 @@ int	piper(t_command cmd, int infile_fd, int outfile_fd, int pipers[2])
 		return (-1);
 	if (pid != 0)		// Si c'est un pid, c'est juste l'info du pid de l'enfant a l'intention du parent
 		return (pid);
-	if (cmd.position == START)
+	if (cmd.position == START && infile_fd != -1)
 		dup2(infile_fd, STDIN_FILENO);
+	if (cmd.position == START && infile_fd == -1)
+		dup2(pipers[1], STDIN_FILENO); // TODO ca bug, mais au moins il continue avec un fd vide
 	if (cmd.position != END)
 		dup2(pipers[1], STDOUT_FILENO); // remplace le standard output par le fd to write
 	if (cmd.position != START)
@@ -40,17 +42,17 @@ int	piper(t_command cmd, int infile_fd, int outfile_fd, int pipers[2])
 
 void	pipex(t_command *cmds, int infile_fd, int outfile_fd /*, char **envp */)
 {
-	int		i;
 	int		pipers[2]; // (read, write)
+	int		pid1;
+	int		pid2;
 
-	(void)i;
+
 	if (pipe(pipers) == -1)
 		full_free(&cmds, "Un probleme a eu lieu lors de l'ouverture du pipe");
-	i = 0;
-	int pid1 = piper(cmds[0], infile_fd, outfile_fd, pipers);
+	pid1 = piper(cmds[0], infile_fd, outfile_fd, pipers);
 	if (pid1 == -1)
 		full_free(&cmds, "N'a pas fork... / Ne s'est pas execve");
-	int pid2 = piper(cmds[1], infile_fd, outfile_fd, pipers);
+	pid2 = piper(cmds[1], infile_fd, outfile_fd, pipers);
 	if (pid2 == -1)
 		full_free(&cmds, "N'a pas fork... / Ne s'est pas execve");
 	close(pipers[0]);
@@ -83,8 +85,12 @@ int	main(int argc, char **argv, char **envp)
 	if (argc < 4)
 		terminate("Pas assez d'arguments\n\"infile\" \"cmd1\" \"cmd2\" \"outfile\"");
 	infile_fd = open(argv[0], O_RDONLY);
+	/*
 	if (infile_fd == -1)
 		terminate("Probleme lors de l'ouverture du fichier d'entree");
+		*/
+	if (infile_fd == -1)
+		ft_putendl_fd("Probleme lors de l'ouverture du fichier d'entree", 1);
 	outfile_fd = open(argv[argc - 1], O_TRUNC | O_CREAT | O_RDWR, 0000644); // TODO s'il existe deja
 	if (outfile_fd == -1)
 		terminate("Probleme lors de l'ouverture du fichier de sortie");

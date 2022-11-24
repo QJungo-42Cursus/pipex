@@ -19,36 +19,46 @@ static void	*free_all(char ***res)
 	return (NULL);
 }
 
+//34 -> "
+//39 -> '
 static int	is_quote(char c)
 {
 	return (c == 34 || c == 39);
 }
 
+static void escape(char const *s, t_word *words, int *i_char, int *i_word)
+{
+	(void)words;
+	(void)i_word;
+	// Set celui d'apres directement... 
+	char	*dest = (char *)&(s[*i_char]);
+	char	*src = (char *)&(s[(*i_char) + 1]);
+	int		len = ft_strlen(dest);
+
+	// TODO il faudrait gerer chaque escape sequence pour inserer ce qu'il faut ????
+	if (is_quote(s[(*i_char) + 1]) || is_in_charset(s[(*i_char) + 1]," "))
+		ft_strlcpy(dest, src, len);
+}
+
+//92 -> backslash
 static void	to_next_quote(
 		char const *s, t_word *words, int *i_char, int *i_word)
 {
 	char	sep;
+	t_bool	is_single_quote;
 
 	sep = s[*i_char];
+	is_single_quote = sep == 39;
 	(*i_char)++;
 	words[*i_word].pos = *i_char;
 	while (s[*i_char] != sep && s[*i_char] != '\0')
 	{
 		// Si c'est un back slash
 		//if (s[*i_char] == 92 && is_quote(s[(*i_char) + 1]))
-		if (s[*i_char] == 92 && 
-				(is_quote(s[(*i_char) + 1]) ||
-				 is_in_charset(s[(*i_char) + 1]," ")
-				 )
-		   )
-				
-		{
-			// Set celui d'apres directement... 
-			char	*dest = (char *)&(s[*i_char]);
-			char	*src = (char *)&(s[(*i_char) + 1]);
-			int		len = ft_strlen(dest);
-			ft_strlcpy(dest, src, len);
-		}
+		//if (!is_single_quote && s[*i_char] == 92 && (is_quote(s[(*i_char) + 1]) || is_in_charset(s[(*i_char) + 1]," ")	 )   )
+		if (!is_single_quote && s[*i_char] == 92)
+			escape(s, words, i_char, i_word);
+
 		(*i_char)++;
 	}
 	words[*i_word].len = *i_char - words[*i_word].pos;

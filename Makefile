@@ -61,7 +61,7 @@ hard: all
 
 s: all
 	$(RM) outfile
-	./pipex "infile" './scr ipt.sh' "cat" "outfile"
+	./pipex "infile" './script.sh' "cat" "outfile"
 
 
 tb: all

@@ -66,7 +66,15 @@ t_command	*get_cmds(int argc, char **argv, char **envp)
 		if (cmds[i].argv == NULL)
 			pre_free(&cmds, "argv pas trouve...");
 		cmds[i].path = get_cmd_path(cmds[i].argv[0], env_paths);
+		cmds[i].is_script = FALSE;
 		cmds[i].envp = envp;
+		/*
+		if (ft_strncmp(cmds[i].path, "./", 2) == 0) // TODO vu que c'est un script je lui donne pas l'env
+		{
+			cmds[i].envp = NULL;
+			cmds[i].is_script = TRUE;
+		}
+		*/
 		i++;
 	}
 	return (cmds);

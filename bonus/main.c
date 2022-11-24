@@ -108,4 +108,5 @@ int	main(int argc, char **argv, char **envp)
 	pipex(cmds, infile_fd, outfile_fd);
 	wait(0);
 	// TODO free...
+	return (0);
 }

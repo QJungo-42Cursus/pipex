@@ -9,13 +9,15 @@ typedef enum e_position {
 
 typedef struct s_command {
 	///		Path to the file binary
-	char	*path;
+	char		*path;
 	///		args to be passed (the first is the name)
-	char	**argv;
-	char	**envp;
+	char		**argv;
+	char		**envp;
 	// autre ??
-	int		pid;
+	int			pid;
 	t_position	position;	
+	t_bool		is_script;
+
 }	t_command;
 
 char	*read_all_file(const int fd);
