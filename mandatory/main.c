@@ -12,6 +12,8 @@
 
 #include <sys/wait.h>		// waitpid ?
 
+#include <errno.h>			// errno
+
 int	piper(t_command cmd, int infile_fd, int outfile_fd, int pipers[2])
 {
 	int pid;
@@ -32,11 +34,7 @@ int	piper(t_command cmd, int infile_fd, int outfile_fd, int pipers[2])
 	close(pipers[0]);
 	close(pipers[1]);
 	if (execve(cmd.path, cmd.argv, cmd.envp) == -1)
-	{
-		perror("execve");
-		//TODO test !!!
-		exit(1);
-	}
+		terminate("execve oups: ");
 	return (-1);
 }
 
@@ -61,22 +59,25 @@ void	pipex(t_command *cmds, int infile_fd, int outfile_fd /*, char **envp */)
 	waitpid(pid2, NULL, 0);
 }
 
+void	log_first_argv(char **argv)
+{
+	int		i;
+
+	i = 0;
+	while (argv[i] != NULL)
+	{
+		ft_printf("%s\n", argv[i]);
+		i++;
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_command	*cmds;
 	int			infile_fd;
 	int			outfile_fd;
 
-	/*
-	int i = 0;
-	while (argv[i] != NULL)
-	{
-		printf("%s \n", argv[i]);
-		i++;
-
-	}
-	return 0;
-	*/
+	log_first_argv(argv);
 	argc--;
 	argv++;
 	if (argc < 4)
@@ -84,7 +85,7 @@ int	main(int argc, char **argv, char **envp)
 	infile_fd = open(argv[0], O_RDONLY);
 	if (infile_fd == -1)
 		terminate("Probleme lors de l'ouverture du fichier d'entree");
-	outfile_fd = open(argv[argc - 1], O_TRUNC | O_CREAT | O_RDWR, 0000644);
+	outfile_fd = open(argv[argc - 1], O_TRUNC | O_CREAT | O_RDWR, 0000644); // TODO s'il existe deja
 	if (outfile_fd == -1)
 		terminate("Probleme lors de l'ouverture du fichier de sortie");
 	cmds = get_cmds(argc - 1, argv + 1, envp);

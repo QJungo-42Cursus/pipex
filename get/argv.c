@@ -19,6 +19,11 @@ static void	*free_all(char ***res)
 	return (NULL);
 }
 
+static int	is_quote(char c)
+{
+	return (c == 34 || c == 39);
+}
+
 static void	to_next_quote(
 		char const *s, t_word *words, int *i_char, int *i_word)
 {
@@ -29,22 +34,29 @@ static void	to_next_quote(
 	words[*i_word].pos = *i_char;
 	while (s[*i_char] != sep && s[*i_char] != '\0')
 	{
+		// Si c'est un back slash
+		//if (s[*i_char] == 92 && is_quote(s[(*i_char) + 1]))
+		if (s[*i_char] == 92 && 
+				(is_quote(s[(*i_char) + 1]) ||
+				 is_in_charset(s[(*i_char) + 1]," ")
+				 )
+		   )
+				
+		{
+			// Set celui d'apres directement... 
+			char	*dest = (char *)&(s[*i_char]);
+			char	*src = (char *)&(s[(*i_char) + 1]);
+			int		len = ft_strlen(dest);
+			ft_strlcpy(dest, src, len);
+		}
 		(*i_char)++;
 	}
 	words[*i_word].len = *i_char - words[*i_word].pos;
 	(*i_word)++;
 	(*i_char)++;
 }
-/*
-// Si c'est un back slash .. (inutile ??)
-if (s[*i_char] == 92)
-{
-	// Set celui d'apres directement... 
-	//ft_memmove(&(s[*i_char]), &(s[(*i_char) + 1]), ft_strlen(&(s[*i_char])));
-	//ft_printf("\\\\", s[*i_char]);
-}
-*/
 
+// 39 et 34 sont les valeurs ASCII de ' et "
 static int	index_words(char const *s, t_word *words)
 {
 	int	i_char;
@@ -60,16 +72,22 @@ static int	index_words(char const *s, t_word *words)
 		{
 			words[i_word].pos = i_char;
 			while (s[i_char] != ' ' && s[i_char] != '\0')
+			{
+				if (is_quote(s[i_char]))
+					to_next_quote(s, words, &i_char, &i_word);
 				i_char++;
+			}
 			words[i_word].len = i_char - words[i_word].pos;
 			i_word++;
 		}
-		if (s[i_char] == 39 || s[i_char] == 34)
+		if (is_quote(s[i_char]))
 			to_next_quote(s, words, &i_char, &i_word);
 	}
 	return (i_word);
 }
 
+// Le but de cette fonction est de separer en split les arguments 
+// qui sont en un string
 char	**get_argv(char const *argv)
 {
 	t_word	words[2048];
@@ -85,6 +103,7 @@ char	**get_argv(char const *argv)
 	while (i_word < n_word)
 	{
 		res[i_word] = ft_substr(argv, words[i_word].pos, words[i_word].len);
+		ft_printf("%d| (%s)\n", i_word, res[i_word]); //
 		if (res[i_word] == NULL)
 			return (free_all(&res));
 		i_word++;

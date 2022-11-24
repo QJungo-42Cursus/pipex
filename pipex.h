@@ -13,7 +13,6 @@ typedef struct s_command {
 	///		args to be passed (the first is the name)
 	char	**argv;
 	char	**envp;
-	//char	**envp;
 	// autre ??
 	int		pid;
 	t_position	position;	
