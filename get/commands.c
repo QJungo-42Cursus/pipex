@@ -6,12 +6,13 @@
 /*   By: qjungo <qjungo@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 11:50:20 by qjungo            #+#    #+#             */
-/*   Updated: 2022/11/28 13:26:55 by qjungo           ###   ########.fr       */
+/*   Updated: 2022/11/28 15:38:02 by qjungo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
 #include "../pipex.h"
+#include <unistd.h>
 
 void	pre_free(t_command **cmds, char *msg)
 {
@@ -71,6 +72,11 @@ t_command	*get_cmds(int argc, char **argv, char **envp)
 		split_free(env_paths);
 	return (cmds);
 }
+
+/*
+		if (access(cmds[i].path, X_OK) != 0)
+			pre_free(&cmds, "LES DROIIIITS");
+*/
 
 /*
 #include <stdio.h>

@@ -46,7 +46,11 @@ re: fclean all
 
 t: all
 	$(RM) outfile
+	< infile cat
 	./pipex "infile" "cat" "wc -l" "outfile"
+	#./pipex "infile" "cat" "wsdlkfc -l" "outfile"
+	@#< infile cat | ldfjkslf > outfile
+	@#CA
 
 leaks: all
 	$(RM) outfile
