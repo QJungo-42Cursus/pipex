@@ -6,13 +6,13 @@
 /*   By: qjungo <qjungo@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 19:04:41 by qjungo            #+#    #+#             */
-/*   Updated: 2022/11/24 19:08:17 by qjungo           ###   ########.fr       */
+/*   Updated: 2022/11/28 12:34:10 by qjungo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-int	ft_isspace (int c)
+int	ft_isspace(int c)
 {
 	return (is_in_charset(c, " \t\f\n\r\v"));
 }

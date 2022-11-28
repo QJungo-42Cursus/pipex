@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_token_functions.c                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qjungo <qjungo@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/28 12:27:45 by qjungo            #+#    #+#             */
+/*   Updated: 2022/11/28 12:27:53 by qjungo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "tokenizer.h"
 #include "../libft/libft.h"
 #include <stdio.h>
@@ -15,7 +27,7 @@ t_sep	get_sep(char sep)
 	return (SEP_ERROR);
 }
 
-t_get_token	*list_func()
+t_get_token	*list_func(void)
 {
 	t_get_token	*list;
 

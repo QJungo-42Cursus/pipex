@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qjungo <qjungo@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/28 11:53:02 by qjungo            #+#    #+#             */
+/*   Updated: 2022/11/28 11:53:24 by qjungo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "tokenizer.h"
 #include "../libft/libft.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
 
-
-/// Renvoie un substr du prochain token qu'il se charge de trouver + avance le curseur (l'index)
+/// Renvoie un substr du prochain token qu'il se charge de trouver 
+/// + avance le curseur (l'index)
 /// En cas d'erreur, renvoie NULL ET set errno
 /// Il peut arriver qu'il renvoie NULL sans erreur (ex: ' echo salut ""')
 ///    -> Dans ce cas, il faut juste passer au token suivant
@@ -35,7 +47,7 @@ char	*get_next_token(char *str, int *index)
 	if (start == -1 || end == start)
 		return (NULL);
 	else
-		return(ft_substr(str, start, end - start));
+		return (ft_substr(str, start, end - start));
 }
 
 void	tokenize(char *line, int *index, t_list **tokens)
@@ -50,7 +62,7 @@ void	tokenize(char *line, int *index, t_list **tokens)
 	tokenize(line, index, tokens);
 }
 
-t_list *tokenizer(char *str)
+t_list	*tokenizer(char *str)
 {
 	t_list	*tokens;
 	int		index;

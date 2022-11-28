@@ -1,45 +1,51 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_token_quote.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qjungo <qjungo@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/28 12:21:28 by qjungo            #+#    #+#             */
+/*   Updated: 2022/11/28 12:28:30 by qjungo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include "../libft/libft.h"
 
-/// Gere les simples quotes '
-void	get_token_quote(char *str, int *index, int *start, int *end)
+static int	check(char *str, int *index, int *start, int *end)
 {
-	//printf("quote %s \n", &str[*index]);
-	/// Si c'est le dernier char -> error
-	/// Vu que j'ai trim au debut, pas besoin de chercher apres
 	if (str[*index + 1] == '\0')
 	{
-		// TODO
-		printf("TODO: QUOTE not closed\n");
 		*end = *index;
-		return ;
+		return (1);
 	}
-
-	/// Si les quotes sont fermées et vide, on cherche la suite
 	(*index)++;
 	if (str[*index] == '\'')
 	{
 		*end = -1;
-		*start = -1; // TODO c'est pas fait expres, mais quand je le met a 0, ca marche pas
+		*start = -1;
 		(*index)++;
-		return ;
+		return (1);
 	}
+	return (0);
+}
 
-	/// Sinon mode dquote "normal"
+/// Gere les simples quotes '
+void	get_token_quote(char *str, int *index, int *start, int *end)
+{
+	if (check(str, index, start, end))
+		return ;
 	(*start) = *index;
 	while (str[*index] != '\'')
 	{
 		if (str[*index] == '\0')
 		{
-			// TODO
-			printf("TODO: QUOTE not closed\n");
 			*end = *index;
 			return ;
 		}
 		(*index)++;
 	}
-
-	/// S'il reste du texte apres le quote, on le lit jusqu'a un isspace
 	if (!ft_isspace(str[*index]) && str[*index] != '\0')
 		ft_strlcpy(str + *index, str + *index + 1, ft_strlen(str + *index));
 	while (!ft_isspace(str[*index]) && str[*index] != '\0')

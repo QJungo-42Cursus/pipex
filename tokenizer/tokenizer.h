@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qjungo <qjungo@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/28 11:51:34 by qjungo            #+#    #+#             */
+/*   Updated: 2022/11/28 11:52:18 by qjungo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef TOKENIZER_H
 # include "../libft/libft.h"
 # define TOKENIZER_H
@@ -9,15 +21,15 @@ typedef enum e_sep
 	DQUOTE,
 	SEP_ERROR,
 	NONE
-} t_sep;
+}	t_sep;
 
-typedef void (*t_get_token)(char *str, int *index, int *start, int *end); // TODO trop d'args ? faire une struct ?
+typedef void	(*t_get_token)(char *str, int *index, int *start, int *end);
 
-void	get_token_dquote(char *str, int *index, int *start, int *end);
-void	get_token_quote(char *str, int *index, int *start, int *end);
-void	get_token_normal(char *str, int *index, int *start, int *end);
+void		get_token_dquote(char *str, int *index, int *start, int *end);
+void		get_token_quote(char *str, int *index, int *start, int *end);
+void		get_token_normal(char *str, int *index, int *start, int *end);
 
-t_get_token	*list_func();
+t_get_token	*list_func(void);
 t_sep		get_sep(char sep);
 t_list		*tokenizer(char *str);
 

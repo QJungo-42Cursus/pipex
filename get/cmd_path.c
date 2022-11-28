@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_path.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qjungo <qjungo@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/28 11:49:42 by qjungo            #+#    #+#             */
+/*   Updated: 2022/11/28 11:49:43 by qjungo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../libft/libft.h"
 #include <unistd.h>
 
@@ -6,10 +18,6 @@ char	*get_cmd_path(char *name, char **env_paths)
 	int		i;
 	char	*tmp_full_path;
 
-	/*
-	if (ft_strncmp(name, "./", 2) == 0) // TODO vu que c'est un script je lui donne pas l'env
-		return (ft_strdup(name));
-	*/
 	i = 0;
 	if (env_paths != NULL)
 	{

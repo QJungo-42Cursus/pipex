@@ -6,7 +6,7 @@
 /*   By: qjungo <qjungo@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:19:44 by qjungo            #+#    #+#             */
-/*   Updated: 2022/11/28 11:46:06 by qjungo           ###   ########.fr       */
+/*   Updated: 2022/11/28 12:58:38 by qjungo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,20 @@ void	terminate(char *s)
 }
 //exit(errno);
 
-void		full_free(t_command **cmds, char *err_msg)
+void	full_free(t_command **cmds, char *err_msg, int fd1, int fd2)
 {
 	int		i;
 
+	close(fd1);
+	close(fd2);
 	i = 0;
 	while ((*cmds)[i - 1].position != END)
 	{
 		if ((*cmds)[i].argv != NULL)
 			split_free((*cmds)[i].argv);
-		if ((*cmds)[i].path!= NULL)
+		if ((*cmds)[i].path != NULL)
 			free((*cmds)[i].path);
-		i++;	
+		i++;
 	}
 	free(*cmds);
 	if (err_msg != NULL)

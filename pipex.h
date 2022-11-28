@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qjungo <qjungo@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/28 12:36:04 by qjungo            #+#    #+#             */
+/*   Updated: 2022/11/28 13:01:07 by qjungo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PIPEX_H
 # define PIPEX_H
 
@@ -7,20 +19,18 @@ typedef enum e_position {
 	END,
 }	t_position;
 
-typedef struct s_command {
 	///		Path to the file binary
-	char		*path;
 	///		args to be passed (the first is the name)
+	// autre ??
+typedef struct s_command {
+	char		*path;
 	char		**argv;
 	char		**envp;
-	// autre ??
-	int			pid;
 	t_position	position;	
-	t_bool		is_script;
-
 }	t_command;
+//int			pid;
 
-char	*read_all_file(const int fd);
+char		*read_all_file(const int fd);
 
 //			/get
 char		**get_env_path(char **envp);
@@ -30,6 +40,6 @@ char		**get_argv(char const *argv);
 
 //			utils.c
 void		terminate(char *s);
-void		full_free(t_command **cmds, char *err_msg);
+void		full_free(t_command **cmds, char *err_msg, int fd1, int fd2);
 
 #endif /* PIPEX_H */
