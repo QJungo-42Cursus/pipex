@@ -48,6 +48,12 @@ t: all
 	$(RM) outfile
 	./pipex "infile" "cat" "wc -l" "outfile"
 
+leaks: all
+	$(RM) outfile
+	leaks -atExit -- ./pipex "infile" "cat" "wc -l" "outfile"
+	leaks -atExit -- ./pipex "infile" "dontexist" "wc" "outfile"
+	leaks -atExit -- ./pipex "infile" "script.sh" "wc" "outfile"
+
 SAN =	-fsanitize=address -fsanitize=undefined -fno-sanitize-recover=all \
 		-fsanitize=float-divide-by-zero -fsanitize=float-cast-overflow \
 		-fno-sanitize=null -fno-sanitize=alignment
@@ -56,5 +62,7 @@ san:
 	@make -C libft
 	@$(CC) $(CFLAGS) $(M_SRCS) $(S_SRCS) $(SAN) -g $(LIBFT) -o $(NAME)
 	./pipex "infile" "cat" "wc -l" "outfile"
+	./pipex "infile" "dontexist" "wc" "outfile"
+	./pipex "infile" "script.sh" "wc" "outfile"
 
 .PHONY: all clean fclean re

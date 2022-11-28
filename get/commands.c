@@ -6,7 +6,7 @@
 /*   By: qjungo <qjungo@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 11:50:20 by qjungo            #+#    #+#             */
-/*   Updated: 2022/11/28 13:03:09 by qjungo           ###   ########.fr       */
+/*   Updated: 2022/11/28 13:26:55 by qjungo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,40 @@ static void	all_cmds(t_command **cmds, char ***env_paths, char **envp, int argc)
 	if (*cmds == NULL)
 		terminate("Probleme lors d'allocation de memoires pour les commandes");
 	*env_paths = get_env_path(envp);
+}
+
+void	set_position(t_command *cmds, int i)
+{
+	cmds[i].position = END;
+	if (i == 1)
+		cmds[i - 1].position = START;
+	if (i > 1)
+		cmds[i - 1].position = MIDDLE;
+}
+
+t_command	*get_cmds(int argc, char **argv, char **envp)
+{
+	t_command	*cmds;
+	char		**env_paths;
+	int			i;
+
+	all_cmds(&cmds, &env_paths, envp, argc);
+	i = 0;
+	while (i < argc - 1)
+	{
+		set_position(cmds, i);
+		cmds[i].path = NULL;
+		cmds[i].argv = NULL;
+		cmds[i].argv = get_argv(argv[i]);
+		if (cmds[i].argv == NULL)
+			pre_free(&cmds, "argv pas trouve...");
+		cmds[i].path = get_cmd_path(cmds[i].argv[0], env_paths);
+		cmds[i].envp = envp;
+		i++;
+	}
+	if (env_paths != NULL)
+		split_free(env_paths);
+	return (cmds);
 }
 
 /*
@@ -68,36 +102,3 @@ void	log_cmd(t_command *cmds, int cmd_l)
 	}
 }
 */
-
-void	set_position(t_command *cmds, int i)
-{
-	cmds[i].position = END;
-	if (i == 1)
-		cmds[i - 1].position = START;
-	if (i > 1)
-		cmds[i - 1].position = MIDDLE;
-}
-
-t_command	*get_cmds(int argc, char **argv, char **envp)
-{
-	t_command	*cmds;
-	char		**env_paths;
-	int			i;
-
-	all_cmds(&cmds, &env_paths, envp, argc);
-	i = 0;
-	while (i < argc - 1)
-	{
-		set_position(cmds, i);
-		cmds[i].path = NULL;
-		cmds[i].argv = NULL;
-		cmds[i].argv = get_argv(argv[i]);
-		if (cmds[i].argv == NULL)
-			pre_free(&cmds, "argv pas trouve...");
-		cmds[i].path = get_cmd_path(cmds[i].argv[0], env_paths);
-		cmds[i].envp = envp;
-		i++;
-	}
-	return (cmds);
-}
-//log_cmd(cmds, argc - 1); // TODO
