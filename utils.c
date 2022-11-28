@@ -6,7 +6,7 @@
 /*   By: qjungo <qjungo@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:19:44 by qjungo            #+#    #+#             */
-/*   Updated: 2022/11/24 14:24:23 by qjungo           ###   ########.fr       */
+/*   Updated: 2022/11/28 11:46:06 by qjungo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void	terminate(char *s)
 	}
 	else
 		perror(s);
-	//exit(errno);
 	exit(1);
 }
+//exit(errno);
 
 void		full_free(t_command **cmds, char *err_msg)
 {

@@ -79,7 +79,12 @@ int	main(int argc, char **argv, char **envp)
 	int			infile_fd;
 	int			outfile_fd;
 
-	log_first_argv(argv);
+
+	//execve("subdir/script.sh", NULL, NULL);
+	//return 0;
+
+
+
 	argc--;
 	argv++;
 	if (argc < 4)

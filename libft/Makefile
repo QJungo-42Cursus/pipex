@@ -35,6 +35,7 @@ SRCS_CHAR = 	ft_isalnum.c \
 				ft_isascii.c \
 				ft_isdigit.c \
 				ft_isprint.c \
+				ft_isspace.c \
 				is_in_charset.c
 
 SRCS_LST = 		ft_lstnew.c \
@@ -52,6 +53,7 @@ SRCS_PRT = 		ft_putchar_fd.c \
 				ft_putstr_fd.c \
 				ft_putendl_fd.c \
 				ft_putnbr_fd.c \
+				ft_color.c \
 				ft_printf/ft_printf.c \
 				ft_printf/conversions/conversions.c \
 				ft_printf/conversions/character.c \

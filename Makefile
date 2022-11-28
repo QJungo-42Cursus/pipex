@@ -10,7 +10,13 @@ S_SRCS =		utils.c \
 				get/env_path.c \
 				get/cmd_path.c \
 				get/argv.c \
-				get/commands.c
+				get/commands.c \
+				tokenizer/tokenizer.c \
+				tokenizer/get_next_token_functions.c \
+				tokenizer/get_token_normal.c \
+				tokenizer/get_token_quote.c \
+				tokenizer/get_token_dquote.c \
+				tokenizer/debug_helpers.c
 
 M_SRC =			main.c
 M_SRCS =		$(addprefix mandatory/, $(M_SRC))
